@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
@@ -160,8 +161,8 @@ public class DependencyAnalyzer {
         // 1. Verificar se é um import da própria library
         String importPath = importStr.replace('.', File.separatorChar) + ".groovy";
         
-        try {
-            Optional<Path> foundFile = Files.walk(libRoot)
+        try (Stream<Path> stream = Files.walk(libRoot)) {
+            Optional<Path> foundFile = stream
                 .filter(p -> p.toString().endsWith(importPath))
                 .findFirst();
                 
